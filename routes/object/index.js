@@ -4,20 +4,25 @@ module.exports = async function (fastify, opts) {
   fastify.get('/node', async function () {
     const users = await fastify.knex('users').select()
 
+    const currentYear = new Date().getFullYear()
+
     return users.map(user => ({
       id: user.id,
-      firstName: user.first_name,
-      lastName: user.last_name,
-      birthDate: user.birth_date
+      name: {
+        first: user.first_name,
+        last: user.last_name
+      },
+      birth: {
+        date: user.birth_date,
+        age: currentYear - user.birth_date.getFullYear()
+      }
     }))
   })
 
   fastify.get('/db', function () {
-    return fastify.knex('users').select({
-      id: 'id',
-      firstName: 'first_name',
-      lastName: 'last_name',
-      birthDate: 'birth_date'
+    return fastify.knex('users').select('id', {
+      name: fastify.knex.raw("json_build_object('first', first_name, 'last', last_name)"),
+      birth: fastify.knex.raw("json_build_object('date', birth_date, 'age', date_part('year', CURRENT_DATE) - date_part('year', birth_date))")
     })
   })
 }
