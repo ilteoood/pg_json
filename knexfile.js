@@ -22,5 +22,6 @@ const dbConfig = {
 module.exports = {
   development: dbConfig,
   staging: dbConfig,
-  production: dbConfig
+  production: dbConfig,
+  dbConfig
 };
