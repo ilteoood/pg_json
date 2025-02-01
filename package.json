@@ -14,10 +14,10 @@
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback --all",
     "seed": "knex seed:run",
-    "bench:rename:node": "autocannon http://localhost:3000/rename/node",
-    "bench:rename:db": "autocannon http://localhost:3000/rename/db",
-    "bench:object:node": "autocannon http://localhost:3000/object/node",
-    "bench:object:db": "autocannon http://localhost:3000/object/db"
+    "bench:rename:orm": "autocannon http://localhost:3000/rename/orm",
+    "bench:rename:query": "autocannon http://localhost:3000/rename/query",
+    "bench:object:orm": "autocannon http://localhost:3000/object/orm",
+    "bench:object:query": "autocannon http://localhost:3000/object/query"
   },
   "keywords": [],
   "author": "",
@@ -25,11 +25,14 @@
   "dependencies": {
     "@fastify/autoload": "^6.0.0",
     "@fastify/sensible": "^6.0.0",
+    "@prisma/client": "^6.3.0",
+    "dotenv": "^16.4.7",
     "fastify": "^5.0.0",
     "fastify-cli": "^7.3.0",
     "fastify-plugin": "^5.0.0",
     "knex": "^3.1.0",
-    "pg": "^8.13.1"
+    "pg": "^8.13.1",
+    "prisma": "^6.3.0"
   },
   "devDependencies": {
     "autocannon": "^8.0.0"

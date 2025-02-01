@@ -1,8 +1,8 @@
 'use strict'
 
 module.exports = async function (fastify, opts) {
-  fastify.get('/node', async function () {
-    const users = await fastify.knex('users').select()
+  fastify.get('/orm', async function () {
+    const users = await fastify.prisma.users.findMany()
 
     return users.map(user => ({
       id: user.id,
@@ -12,7 +12,7 @@ module.exports = async function (fastify, opts) {
     }))
   })
 
-  fastify.get('/db', function () {
+  fastify.get('/query', function () {
     return fastify.knex('users').select('id', {
       firstName: 'first_name',
       lastName: 'last_name',

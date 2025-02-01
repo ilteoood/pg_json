@@ -1,11 +1,10 @@
-// Update with your config settings.
+const dotenv = require('dotenv');
+dotenv.config();
 
 const dbConfig = {
   client: 'postgresql',
   connection: {
-    database: 'mydb',
-    user: 'myuser',
-    password: 'mypassword'
+    connectionString: process.env.DATABASE_URL,
   },
   pool: {
     min: 2,
