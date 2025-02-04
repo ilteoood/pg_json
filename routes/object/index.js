@@ -52,6 +52,6 @@ module.exports = async function (fastify, opts) {
 
   fastify.get('/query', { schema }, () => fastify.knex('users').select('id', {
     name: fastify.knex.raw("json_build_object('first', first_name, 'last', last_name)"),
-    birth: fastify.knex.raw("json_build_object('date', birth_date, 'age', date_part('year', CURRENT_DATE) - date_part('year', birth_date))")
+    birth: fastify.knex.raw("json_build_object('date', birth_date, 'age', date_part('year', age(birth_date)))")
   }))
 }
