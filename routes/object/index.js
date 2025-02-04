@@ -33,7 +33,7 @@ const schema = {
 
 module.exports = async function (fastify, opts) {
   fastify.get('/orm', { schema }, async () => {
-    const users = await fastify.knex('users').select()
+    const users = await fastify.prisma.users.findMany()
 
     const currentYear = new Date().getFullYear()
 
