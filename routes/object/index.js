@@ -1,7 +1,38 @@
 'use strict'
 
+const schema = {
+  response: {
+    200: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer' },
+          name: {
+            type: 'object',
+            properties: {
+              first: { type: 'string' },
+              last: { type: 'string' }
+            },
+            required: ['first', 'last']
+          },
+          birth: {
+            type: 'object',
+            properties: {
+              date: { type: 'string', format: 'date' },
+              age: { type: 'integer' }
+            },
+            required: ['date', 'age']
+          }
+        },
+        required: ['id', 'name', 'birth']
+      }
+    }
+  }
+}
+
 module.exports = async function (fastify, opts) {
-  fastify.get('/orm', async function () {
+  fastify.get('/orm', { schema }, async () => {
     const users = await fastify.knex('users').select()
 
     const currentYear = new Date().getFullYear()
@@ -19,10 +50,8 @@ module.exports = async function (fastify, opts) {
     }))
   })
 
-  fastify.get('/query', function () {
-    return fastify.knex('users').select('id', {
-      name: fastify.knex.raw("json_build_object('first', first_name, 'last', last_name)"),
-      birth: fastify.knex.raw("json_build_object('date', birth_date, 'age', date_part('year', CURRENT_DATE) - date_part('year', birth_date))")
-    })
-  })
+  fastify.get('/query', { schema }, () => fastify.knex('users').select('id', {
+    name: fastify.knex.raw("json_build_object('first', first_name, 'last', last_name)"),
+    birth: fastify.knex.raw("json_build_object('date', birth_date, 'age', date_part('year', CURRENT_DATE) - date_part('year', birth_date))")
+  }))
 }

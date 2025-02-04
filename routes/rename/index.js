@@ -1,7 +1,25 @@
 'use strict'
 
+const schema = {
+  response: {
+    200: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer' },
+          firstName: { type: 'string' },
+          lastName: { type: 'string' },
+          birthDate: { type: 'string', format: 'date' }
+        },
+        required: ['id', 'firstName', 'lastName', 'birthDate']
+      }
+    }
+  }
+}
+
 module.exports = async function (fastify, opts) {
-  fastify.get('/orm', async function () {
+  fastify.get('/orm', { schema }, async () => {
     const users = await fastify.prisma.users.findMany()
 
     return users.map(user => ({
@@ -12,11 +30,9 @@ module.exports = async function (fastify, opts) {
     }))
   })
 
-  fastify.get('/query', function () {
-    return fastify.knex('users').select('id', {
-      firstName: 'first_name',
-      lastName: 'last_name',
-      birthDate: 'birth_date'
-    })
-  })
+  fastify.get('/query', { schema }, () => fastify.knex('users').select('id', {
+    firstName: 'first_name',
+    lastName: 'last_name',
+    birthDate: 'birth_date'
+  }))
 }
